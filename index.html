@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<!--
+  ============================================
+  ATS-Friendly Resume Builder
+  ============================================
+  Deployment: Push to GitHub, enable GitHub Pages on Settings > Pages
+  Customize: Edit CSS variables in styles.css :root
+  Add Templates: Add new CSS class in styles.css, add tab in template-tabs
+  Modify PDF: Edit generatePDF() in app.js
+  ============================================
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create professional, ATS-friendly resumes with our free resume builder. Beautiful templates, real-time preview, and instant PDF download.">
+  <title>ResumeForge — Professional ATS Resume Builder</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+</head>
+<body>
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Header -->
+  <header class="app-header" id="appHeader">
+    <div class="header-inner">
+      <div class="app-logo animate-in">
+        <div class="logo-icon">R</div>
+        <div class="logo-text">
+          <h1>ResumeForge</h1>
+          <p>ATS-Friendly Resume Builder</p>
+        </div>
+      </div>
+      <div class="header-actions animate-in animate-delay-2">
+        <div class="save-indicator" id="saveIndicator">
+          <i class="fa-solid fa-cloud"></i>
+          <span>Ready</span>
+        </div>
+        <button class="icon-btn" onclick="saveData()" title="Save Progress" aria-label="Save progress">
+          <i class="fa-solid fa-floppy-disk"></i>
+        </button>
+        <button class="icon-btn" onclick="loadSampleData()" title="Load Sample Data" aria-label="Load sample data">
+          <i class="fa-solid fa-magic-wand-sparkles"></i>
+        </button>
+        <button class="icon-btn" onclick="showClearConfirm()" title="Clear All" aria-label="Clear form">
+          <i class="fa-solid fa-trash-can"></i>
+        </button>
+        <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" role="switch" aria-label="Toggle dark mode" tabindex="0"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar-wrapper">
+      <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+    <div class="progress-text"><span id="progressText">0</span>% Complete</div>
+  </div>
+
+  <!-- Main Layout -->
+  <main class="main-container">
+    <!-- Form Panel -->
+    <div class="form-panel" id="formPanel">
+
+      <!-- Section 1: Personal Info -->
+      <div class="accordion-section active" data-section="personal">
+        <div class="accordion-header" onclick="toggleSection(this)">
+          <div class="section-icon"><i class="fa-solid fa-user"></i></div>
+          <span class="section-title">Personal Information</span>
+          <div class="section-check" id="check-personal"><i class="fa-solid fa-check"></i></div>
+          <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content">
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-user"></i> Full Name <span class="required">*</span></label>
+              <div class="input-wrapper">
+                <input type="text" class="form-input has-icon" id="fullName" placeholder="John Doe" data-field="fullName">
+                <i class="fa-solid fa-signature input-icon"></i>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-location-dot"></i> Location</label>
+                <input type="text" class="form-input" id="location" placeholder="City, State" data-field="location">
+              </div>
+              <div class="form-group">
+                <label class="form-label"><i class="fa-solid fa-phone"></i> Phone <span class="required">*</span></label>
+                <input type="tel" class="form-input" id="phone" placeholder="+91-XXXXXXXXXX" data-field="phone">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label"><i class="fa-solid fa-envelope"></i> Email <span class="required">*</span></label>
+              <input type="email" class="form-input" id="email" placeholder="john@example.com" data-field="email">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label"><i class="fa-brands fa-linkedin"></i> LinkedIn</label>
+                <input type="url" class="form-input" id="linkedin" placeholder="linkedin.com/in/johndoe" data-field="linkedin">
+              </div>
+              <div class="form-group">
+                <label class="form-label"><i class="fa-brands fa-github"></i> GitHub</label>
+                <input type="url" class="form-input" id="github" placeholder="github.com/johndoe" data-field="github">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Career Objective -->
+      <div class="accordion-section" data-section="objective">
+        <div class="accordion-header" onclick="toggleSection(this)">
+          <div class="section-icon"><i class="fa-solid fa-bullseye"></i></div>
+          <span class="section-title">Career Objective</span>
+          <div class="section-check" id="check-objective"><i class="fa-solid fa-check"></i></div>
+          <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content">
+            <div class="form-group">
+              <label class="form-label">Professional Summary</label>
+              <textarea class="form-textarea" id="objective" rows="5" placeholder="A motivated software engineer with expertise in..." data-field="objective" oninput="updateCharCount(this)"></textarea>
+              <div class="char-counter" id="objectiveCounter">0 / 300 characters (150-300 recommended)</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="showSampleObjective()">
+              <i class="fa-solid fa-lightbulb"></i> Show Example
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Technical Skills -->
+      <div class="accordion-section" data-section="skills">
+        <div class="accordion-header" onclick="toggleSection(this)">
+          <div class="section-icon"><i class="fa-solid fa-code"></i></div>
+          <span class="section-title">Technical Skills</span>
+          <div class="section-check" id="check-skills"><i class="fa-solid fa-check"></i></div>
+          <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content" id="skillsContainer">
+            <!-- Skill categories added dynamically -->
+          </div>
+          <div class="accordion-content" style="padding-top:0">
+            <button class="add-item-btn" onclick="addSkillCategory()">
+              <i class="fa-solid fa-plus"></i> Add Skill Category
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 4: Projects -->
+      <div class="accordion-section" data-section="projects">
+        <div class="accordion-header" onclick="toggleSection(this)">
+          <div class="section-icon"><i class="fa-solid fa-diagram-project"></i></div>
+          <span class="section-title">Projects</span>
+          <div class="section-check" id="check-projects"><i class="fa-solid fa-check"></i></div>
+          <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content" id="projectsContainer">
+            <!-- Project cards added dynamically -->
+          </div>
+          <div class="accordion-content" style="padding-top:0">
+            <button class="add-item-btn" onclick="addProject()">
+              <i class="fa-solid fa-plus"></i> Add Project
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 5: Education -->
+      <div class="accordion-section" data-section="education">
+        <div class="accordion-header" onclick="toggleSection(this)">
+          <div class="section-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <span class="section-title">Education</span>
+          <div class="section-check" id="check-education"><i class="fa-solid fa-check"></i></div>
+          <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content" id="educationContainer">
+            <!-- Education entries added dynamically -->
+          </div>
+          <div class="accordion-content" style="padding-top:0">
+            <button class="add-item-btn" onclick="addEducation()">
+              <i class="fa-solid fa-plus"></i> Add Education
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 6: Certifications -->
+      <div class="accordion-section" data-section="certifications">
+        <div class="accordion-header" onclick="toggleSection(this)">
+          <div class="section-icon"><i class="fa-solid fa-certificate"></i></div>
+          <span class="section-title">Certifications</span>
+          <div class="section-check" id="check-certifications"><i class="fa-solid fa-check"></i></div>
+          <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content" id="certsContainer">
+            <!-- Cert cards added dynamically -->
+          </div>
+          <div class="accordion-content" style="padding-top:0">
+            <button class="add-item-btn" onclick="addCertification()">
+              <i class="fa-solid fa-plus"></i> Add Certification
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 7: Soft Skills -->
+      <div class="accordion-section" data-section="softskills">
+        <div class="accordion-header" onclick="toggleSection(this)">
+          <div class="section-icon"><i class="fa-solid fa-people-arrows"></i></div>
+          <span class="section-title">Soft Skills</span>
+          <div class="section-check" id="check-softskills"><i class="fa-solid fa-check"></i></div>
+          <span class="accordion-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+        </div>
+        <div class="accordion-body">
+          <div class="accordion-content">
+            <div class="form-group">
+              <label class="form-label">Add soft skills (press Enter or comma to add)</label>
+              <div class="chips-container" id="softSkillsChips" onclick="this.querySelector('input').focus()">
+                <input type="text" class="chip-input" id="softSkillInput" placeholder="e.g. Leadership, Communication..." 
+                  onkeydown="handleChipInput(event, 'softSkills')">
+              </div>
+              <div style="margin-top:8px;font-size:0.75rem;color:var(--text-muted)">
+                Suggested: Leadership, Communication, Problem-Solving, Teamwork, Time Management, Adaptability
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Generate PDF Button -->
+      <div class="action-bar animate-in animate-delay-4">
+        <button class="btn btn-primary btn-lg btn-block" id="generateBtn" onclick="showExportModal()">
+          <i class="fa-solid fa-file-pdf"></i> Generate PDF Resume
+        </button>
+      </div>
+      <div class="action-bar" style="padding-top:0">
+        <button class="btn btn-secondary btn-sm" onclick="exportJSON()"><i class="fa-solid fa-download"></i> Export JSON</button>
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importInput').click()"><i class="fa-solid fa-upload"></i> Import JSON</button>
+        <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(event)">
+      </div>
+    </div>
+
+    <!-- Preview Panel -->
+    <div class="preview-panel" id="previewPanel">
+      <div class="preview-header glass-card">
+        <h3><i class="fa-solid fa-eye"></i> Live Preview</h3>
+        <div class="preview-controls">
+          <div class="template-tabs">
+            <button class="template-tab active" onclick="switchTemplate('classic', this)">Classic</button>
+            <button class="template-tab" onclick="switchTemplate('modern', this)">Modern</button>
+            <button class="template-tab" onclick="switchTemplate('creative', this)">Creative</button>
+          </div>
+          <button class="icon-btn close-preview-btn" onclick="toggleMobilePreview()" title="Close preview" style="display:none">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="preview-body">
+        <div class="resume-preview" id="resumePreview">
+          <div style="text-align:center;color:#aaa;padding:60px 20px;">
+            <i class="fa-solid fa-file-lines" style="font-size:48px;margin-bottom:16px;display:block;"></i>
+            Start filling the form to see your resume preview here
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Mobile Preview Toggle FAB -->
+  <button class="btn btn-primary mobile-preview-toggle" id="mobilePreviewBtn" onclick="toggleMobilePreview()">
+    <i class="fa-solid fa-eye"></i> Preview
+  </button>
+
+  <!-- Modal (reusable) -->
+  <div class="modal-overlay" id="modalOverlay" style="display:none" onclick="closeModal(event)">
+    <div class="modal-content" id="modalContent">
+      <!-- Dynamic content -->
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
