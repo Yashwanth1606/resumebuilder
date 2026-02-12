@@ -10,16 +10,22 @@
   Modify PDF: Edit generatePDF() in app.js
   ============================================
 -->
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Create professional, ATS-friendly resumes with our free resume builder. Beautiful templates, real-time preview, and instant PDF download.">
+  <meta name="description"
+    content="Create professional, ATS-friendly resumes with our free resume builder. Beautiful templates, real-time preview, and instant PDF download.">
   <title>ResumeForge — Professional ATS Resume Builder</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+  <script src="https://unpkg.com/html-docx-js/dist/html-docx.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" defer></script>
 </head>
+
 <body>
   <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
@@ -48,7 +54,8 @@
         <button class="icon-btn" onclick="showClearConfirm()" title="Clear All" aria-label="Clear form">
           <i class="fa-solid fa-trash-can"></i>
         </button>
-        <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" role="switch" aria-label="Toggle dark mode" tabindex="0"></div>
+        <div class="theme-toggle" id="themeToggle" onclick="toggleTheme()" role="switch" aria-label="Toggle dark mode"
+          tabindex="0"></div>
       </div>
     </div>
   </header>
@@ -77,9 +84,11 @@
         <div class="accordion-body">
           <div class="accordion-content">
             <div class="form-group">
-              <label class="form-label"><i class="fa-solid fa-user"></i> Full Name <span class="required">*</span></label>
+              <label class="form-label"><i class="fa-solid fa-user"></i> Full Name <span
+                  class="required">*</span></label>
               <div class="input-wrapper">
-                <input type="text" class="form-input has-icon" id="fullName" placeholder="John Doe" data-field="fullName">
+                <input type="text" class="form-input has-icon" id="fullName" placeholder="John Doe"
+                  data-field="fullName">
                 <i class="fa-solid fa-signature input-icon"></i>
               </div>
             </div>
@@ -89,18 +98,21 @@
                 <input type="text" class="form-input" id="location" placeholder="City, State" data-field="location">
               </div>
               <div class="form-group">
-                <label class="form-label"><i class="fa-solid fa-phone"></i> Phone <span class="required">*</span></label>
+                <label class="form-label"><i class="fa-solid fa-phone"></i> Phone <span
+                    class="required">*</span></label>
                 <input type="tel" class="form-input" id="phone" placeholder="+91-XXXXXXXXXX" data-field="phone">
               </div>
             </div>
             <div class="form-group">
-              <label class="form-label"><i class="fa-solid fa-envelope"></i> Email <span class="required">*</span></label>
+              <label class="form-label"><i class="fa-solid fa-envelope"></i> Email <span
+                  class="required">*</span></label>
               <input type="email" class="form-input" id="email" placeholder="john@example.com" data-field="email">
             </div>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label"><i class="fa-brands fa-linkedin"></i> LinkedIn</label>
-                <input type="url" class="form-input" id="linkedin" placeholder="linkedin.com/in/johndoe" data-field="linkedin">
+                <input type="url" class="form-input" id="linkedin" placeholder="linkedin.com/in/johndoe"
+                  data-field="linkedin">
               </div>
               <div class="form-group">
                 <label class="form-label"><i class="fa-brands fa-github"></i> GitHub</label>
@@ -123,7 +135,9 @@
           <div class="accordion-content">
             <div class="form-group">
               <label class="form-label">Professional Summary</label>
-              <textarea class="form-textarea" id="objective" rows="5" placeholder="A motivated software engineer with expertise in..." data-field="objective" oninput="updateCharCount(this)"></textarea>
+              <textarea class="form-textarea" id="objective" rows="5"
+                placeholder="A motivated software engineer with expertise in..." data-field="objective"
+                oninput="updateCharCount(this)"></textarea>
               <div class="char-counter" id="objectiveCounter">0 / 300 characters (150-300 recommended)</div>
             </div>
             <button class="btn btn-secondary btn-sm" onclick="showSampleObjective()">
@@ -226,8 +240,8 @@
             <div class="form-group">
               <label class="form-label">Add soft skills (press Enter or comma to add)</label>
               <div class="chips-container" id="softSkillsChips" onclick="this.querySelector('input').focus()">
-                <input type="text" class="chip-input" id="softSkillInput" placeholder="e.g. Leadership, Communication..." 
-                  onkeydown="handleChipInput(event, 'softSkills')">
+                <input type="text" class="chip-input" id="softSkillInput"
+                  placeholder="e.g. Leadership, Communication..." onkeydown="handleChipInput(event, 'softSkills')">
               </div>
               <div style="margin-top:8px;font-size:0.75rem;color:var(--text-muted)">
                 Suggested: Leadership, Communication, Problem-Solving, Teamwork, Time Management, Adaptability
@@ -244,8 +258,10 @@
         </button>
       </div>
       <div class="action-bar" style="padding-top:0">
-        <button class="btn btn-secondary btn-sm" onclick="exportJSON()"><i class="fa-solid fa-download"></i> Export JSON</button>
-        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importInput').click()"><i class="fa-solid fa-upload"></i> Import JSON</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportJSON()"><i class="fa-solid fa-download"></i> Export
+          JSON</button>
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importInput').click()"><i
+            class="fa-solid fa-upload"></i> Import JSON</button>
         <input type="file" id="importInput" accept=".json" style="display:none" onchange="importJSON(event)">
       </div>
     </div>
@@ -260,7 +276,8 @@
             <button class="template-tab" onclick="switchTemplate('modern', this)">Modern</button>
             <button class="template-tab" onclick="switchTemplate('creative', this)">Creative</button>
           </div>
-          <button class="icon-btn close-preview-btn" onclick="toggleMobilePreview()" title="Close preview" style="display:none">
+          <button class="icon-btn close-preview-btn" onclick="toggleMobilePreview()" title="Close preview"
+            style="display:none">
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
@@ -288,6 +305,7 @@
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app.js?v=2"></script>
 </body>
+
 </html>

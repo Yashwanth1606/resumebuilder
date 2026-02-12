@@ -52,7 +52,7 @@ function showToast(message, type = 'info') {
   const icons = { success: '✅', error: '❌', info: 'ℹ️' };
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  toast.innerHTML = `<span class="toast-icon">${icons[type]||'ℹ️'}</span><span>${message}</span>`;
+  toast.innerHTML = `<span class="toast-icon">${icons[type] || 'ℹ️'}</span><span>${message}</span>`;
   container.appendChild(toast);
   setTimeout(() => {
     toast.classList.add('removing');
@@ -81,8 +81,10 @@ function showClearConfirm() {
   `);
 }
 function clearAllData() {
-  state = { fullName:'', location:'', phone:'', email:'', linkedin:'', github:'', objective:'',
-    skillCategories:[], projects:[], education:[], certifications:[], softSkills:[], template:'classic' };
+  state = {
+    fullName: '', location: '', phone: '', email: '', linkedin: '', github: '', objective: '',
+    skillCategories: [], projects: [], education: [], certifications: [], softSkills: [], template: 'classic'
+  };
   localStorage.removeItem('rb_data');
   document.querySelectorAll('.form-input, .form-textarea').forEach(el => el.value = '');
   renderAll();
@@ -206,7 +208,7 @@ function updateSkillCat(id, field, value) {
 function handleSkillChip(e, catId) {
   if (e.key === 'Enter' || e.key === ',') {
     e.preventDefault();
-    const val = e.target.value.replace(',','').trim();
+    const val = e.target.value.replace(',', '').trim();
     if (!val) return;
     const cat = state.skillCategories.find(c => c.id === catId);
     if (cat && !cat.skills.includes(val)) {
@@ -233,7 +235,7 @@ function removeSkill(catId, skill) {
 // ====== PROJECTS ======
 function addProject() {
   const id = uid();
-  state.projects.push({ id, title:'', technologies:[], bullets:[''], impact:'' });
+  state.projects.push({ id, title: '', technologies: [], bullets: [''], impact: '' });
   renderProjects();
   updatePreview();
   scheduleAutoSave();
@@ -251,7 +253,7 @@ function renderProjects() {
   container.innerHTML = state.projects.map((proj, idx) => `
     <div class="item-card" data-project-id="${proj.id}">
       <div class="item-card-header">
-        <span class="item-card-title">Project ${idx+1}</span>
+        <span class="item-card-title">Project ${idx + 1}</span>
         <div class="item-card-actions">
           <button class="icon-btn" onclick="duplicateProject('${proj.id}')" title="Duplicate"><i class="fa-solid fa-copy"></i></button>
           <button class="icon-btn" onclick="removeProject('${proj.id}')" title="Remove"><i class="fa-solid fa-trash"></i></button>
@@ -276,7 +278,7 @@ function renderProjects() {
           <div class="bullet-item">
             <input type="text" class="form-input" placeholder="Describe a feature or achievement..." value="${escHtml(b)}"
               onchange="updateBullet('${proj.id}',${bi},this.value)">
-            <button class="remove-bullet" onclick="removeBullet('${proj.id}',${bi})" ${proj.bullets.length<=1?'disabled':''}><i class="fa-solid fa-minus"></i></button>
+            <button class="remove-bullet" onclick="removeBullet('${proj.id}',${bi})" ${proj.bullets.length <= 1 ? 'disabled' : ''}><i class="fa-solid fa-minus"></i></button>
           </div>`).join('')}
         </div>
         <button class="btn btn-secondary btn-sm" style="margin-top:8px" onclick="addBullet('${proj.id}')"><i class="fa-solid fa-plus"></i> Add Bullet</button>
@@ -296,7 +298,7 @@ function updateProject(id, field, value) {
 function handleProjTechChip(e, projId) {
   if (e.key === 'Enter' || e.key === ',') {
     e.preventDefault();
-    const val = e.target.value.replace(',','').trim();
+    const val = e.target.value.replace(',', '').trim();
     if (!val) return;
     const p = state.projects.find(x => x.id === projId);
     if (p && !p.technologies.includes(val)) {
@@ -341,7 +343,7 @@ function duplicateProject(id) {
 // ====== EDUCATION ======
 function addEducation() {
   const id = uid();
-  state.education.push({ id, degree:'', college:'', year:'', cgpa:'', coursework:[] });
+  state.education.push({ id, degree: '', college: '', year: '', cgpa: '', coursework: [] });
   renderEducation();
   updatePreview();
   scheduleAutoSave();
@@ -359,7 +361,7 @@ function renderEducation() {
   container.innerHTML = state.education.map((edu, idx) => `
     <div class="item-card" data-edu-id="${edu.id}">
       <div class="item-card-header">
-        <span class="item-card-title">Education ${idx+1}</span>
+        <span class="item-card-title">Education ${idx + 1}</span>
         <div class="item-card-actions">
           <button class="icon-btn" onclick="removeEducation('${edu.id}')" title="Remove"><i class="fa-solid fa-trash"></i></button>
         </div>
@@ -403,7 +405,7 @@ function updateEdu(id, field, val) {
 function handleCourseworkChip(e, eduId) {
   if (e.key === 'Enter' || e.key === ',') {
     e.preventDefault();
-    const val = e.target.value.replace(',','').trim();
+    const val = e.target.value.replace(',', '').trim();
     if (!val) return;
     const ed = state.education.find(x => x.id === eduId);
     if (ed && !ed.coursework.includes(val)) {
@@ -423,7 +425,7 @@ function removeCoursework(eduId, cw) {
 // ====== CERTIFICATIONS ======
 function addCertification() {
   const id = uid();
-  state.certifications.push({ id, name:'', org:'', year:'' });
+  state.certifications.push({ id, name: '', org: '', year: '' });
   renderCertifications();
   updatePreview();
   scheduleAutoSave();
@@ -441,7 +443,7 @@ function renderCertifications() {
   container.innerHTML = state.certifications.map((cert, idx) => `
     <div class="item-card" data-cert-id="${cert.id}">
       <div class="item-card-header">
-        <span class="item-card-title">Certification ${idx+1}</span>
+        <span class="item-card-title">Certification ${idx + 1}</span>
         <div class="item-card-actions">
           <button class="icon-btn" onclick="removeCertification('${cert.id}')" title="Remove"><i class="fa-solid fa-trash"></i></button>
         </div>
@@ -475,7 +477,7 @@ function updateCert(id, field, val) {
 function handleChipInput(e, type) {
   if (e.key === 'Enter' || e.key === ',') {
     e.preventDefault();
-    const val = e.target.value.replace(',','').trim();
+    const val = e.target.value.replace(',', '').trim();
     if (!val || state.softSkills.includes(val)) return;
     state.softSkills.push(val);
     e.target.value = '';
@@ -564,7 +566,7 @@ function loadData() {
       const parsed = JSON.parse(saved);
       state = { ...state, ...parsed };
       // Fill simple fields
-      ['fullName','location','phone','email','linkedin','github','objective'].forEach(f => {
+      ['fullName', 'location', 'phone', 'email', 'linkedin', 'github', 'objective'].forEach(f => {
         const el = document.getElementById(f);
         if (el) el.value = state[f] || '';
       });
@@ -664,7 +666,7 @@ function updatePreview() {
     html += `<div class="section-heading">Education</div>`;
     filledEdu.forEach(e => {
       html += `<div class="edu-row"><span class="edu-degree">${escHtml(e.degree)}</span><span class="edu-year">${escHtml(e.year)}</span></div>`;
-      if (e.college) html += `<div class="edu-college">${escHtml(e.college)}${e.cgpa ? ' — CGPA: '+escHtml(e.cgpa) : ''}</div>`;
+      if (e.college) html += `<div class="edu-college">${escHtml(e.college)}${e.cgpa ? ' — CGPA: ' + escHtml(e.cgpa) : ''}</div>`;
       if (e.coursework.length) html += `<div style="font-size:9px;color:#666;margin-top:2px">Coursework: ${e.coursework.map(escHtml).join(', ')}</div>`;
     });
   }
@@ -673,7 +675,7 @@ function updatePreview() {
   if (filledCerts.length) {
     html += `<div class="section-heading">Certifications</div>`;
     filledCerts.forEach(c => {
-      html += `<div class="cert-item">${escHtml(c.name)}${c.org?' — '+escHtml(c.org):''}${c.year?' ('+escHtml(c.year)+')':''}</div>`;
+      html += `<div class="cert-item">${escHtml(c.name)}${c.org ? ' — ' + escHtml(c.org) : ''}${c.year ? ' (' + escHtml(c.year) + ')' : ''}</div>`;
     });
   }
   // Soft Skills
@@ -714,25 +716,107 @@ function toggleMobilePreview() {
 // ====== EXPORT MODAL ======
 function showExportModal() {
   showModal(`
-    <h3>📄 Export Resume as PDF</h3>
+    <h3>📄 Export Resume</h3>
     <div class="export-options">
       <div class="form-group">
         <label class="form-label">Filename</label>
-        <input type="text" class="form-input" id="exportFilename" value="${state.fullName ? state.fullName.replace(/\s+/g,'_') + '_Resume' : 'My_Resume'}" placeholder="my_resume">
+        <input type="text" class="form-input" id="exportFilename" value="${state.fullName ? state.fullName.replace(/\s+/g, '_') + '_Resume' : 'My_Resume'}" placeholder="my_resume">
       </div>
       <div class="form-group">
-        <label class="form-label">Paper Size</label>
+        <label class="form-label">Paper Size (PDF Only)</label>
         <select class="form-select" id="exportPaperSize">
           <option value="a4">A4</option>
           <option value="letter">Letter</option>
         </select>
       </div>
     </div>
-    <div class="modal-actions" style="margin-top:20px">
+    <div class="modal-actions" style="margin-top:20px; flex-wrap: wrap; gap: 10px;">
       <button class="btn btn-secondary" onclick="document.getElementById('modalOverlay').style.display='none'">Cancel</button>
-      <button class="btn btn-primary" onclick="generatePDF()"><i class="fa-solid fa-file-pdf"></i> Download PDF</button>
+      <div style="display:flex; gap:10px; flex:1; justify-content:flex-end;">
+        <button class="btn btn-secondary" onclick="generateDOCX()"><i class="fa-solid fa-file-word"></i> DOCX</button>
+        <button class="btn btn-primary" onclick="generatePDF()"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+      </div>
     </div>
   `);
+}
+
+// ====== DOCX GENERATION ======
+function generateDOCX() {
+  const filename = (document.getElementById('exportFilename')?.value || 'Resume') + '.docx';
+  // Clone the preview content to modify it for export without touching the DOM
+  const preview = document.getElementById('resumePreview');
+  const clone = preview.cloneNode(true);
+
+  // Clean up interactions or icons if necessary
+  // For now, we take the innerHTML as is, but we add inline styles for better Word compatibility
+  const content = clone.innerHTML;
+
+  const styles = `
+    body { font-family: 'Calibri', sans-serif; font-size: 11pt; line-height: 1.15; color: #000; }
+    h1 { font-size: 24pt; font-weight: bold; color: #000; margin-bottom: 6pt; text-align: center; }
+    .contact-line { text-align: center; font-size: 10pt; color: #444; margin-bottom: 4pt; }
+    .contact-line a { text-decoration: none; color: #444; }
+    
+    .section-heading { 
+      font-size: 14pt; 
+      font-weight: bold; 
+      color: #2563EB; 
+      border-bottom: 1.5pt solid #2563EB; 
+      margin-top: 14pt; 
+      margin-bottom: 8pt; 
+      text-transform: uppercase;
+    }
+    
+    /* Project / Experience */
+    .project-title { font-weight: bold; font-size: 11pt; margin-top: 6pt; }
+    .project-tech { font-style: italic; color: #444; font-size: 10pt; margin-bottom: 2pt; }
+    
+    /* Education */
+    .edu-row { display: flex; justify-content: space-between; margin-top: 6pt; }
+    .edu-degree { font-weight: bold; }
+    .edu-year { text-align: right; }
+    .edu-college { font-style: italic; }
+    
+    /* Certs */
+    .cert-item { margin-bottom: 2pt; }
+    
+    /* Lists */
+    ul { margin: 0; padding-left: 24pt; }
+    li { margin-bottom: 2pt; }
+    
+    /* Soft Skills */
+    .soft-skills-list { margin-top: 4pt; }
+    .soft-skill-tag { display: inline; margin-right: 8pt; }
+  `;
+
+  const html = `<!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>${styles}</style>
+      </head>
+      <body>
+        ${content}
+      </body>
+    </html>`;
+
+  try {
+    if (typeof htmlDocx === 'undefined') {
+      throw new Error('DOCX library not loaded');
+    }
+    // Convert to blob
+    const blob = htmlDocx.asBlob(html, {
+      orientation: 'portrait',
+      margins: { top: 720, right: 720, bottom: 720, left: 720 } // ~0.5 inch (twips)
+    });
+    saveAs(blob, filename);
+
+    document.getElementById('modalOverlay').style.display = 'none';
+    showToast('DOCX downloaded! (Formatting may vary)', 'success');
+  } catch (e) {
+    console.error(e);
+    showToast('Error generating DOCX. Please try again.', 'error');
+  }
 }
 
 // ====== PDF GENERATION ======
@@ -782,7 +866,7 @@ function importJSON(event) {
     try {
       const data = JSON.parse(e.target.result);
       state = { ...state, ...data };
-      ['fullName','location','phone','email','linkedin','github','objective'].forEach(f => {
+      ['fullName', 'location', 'phone', 'email', 'linkedin', 'github', 'objective'].forEach(f => {
         const el = document.getElementById(f);
         if (el) el.value = state[f] || '';
       });
@@ -813,8 +897,8 @@ function loadSampleData() {
     { id: uid(), name: 'Tools & Cloud', skills: ['Git', 'Docker', 'AWS', 'MongoDB', 'PostgreSQL'] },
   ];
   state.projects = [
-    { id: uid(), title: 'E-Commerce Platform', technologies: ['React','Node.js','MongoDB','Stripe'], bullets: ['Built a full-stack e-commerce platform with user auth, product catalog, and payment processing','Implemented real-time inventory tracking using WebSockets','Achieved 95+ Lighthouse performance score with lazy loading and code splitting'], impact: 'Served 5,000+ users with 99.9% uptime' },
-    { id: uid(), title: 'AI-Powered Task Manager', technologies: ['Python','FastAPI','GPT-4','React'], bullets: ['Developed an intelligent task management app with AI-powered priority suggestions','Integrated OpenAI API for natural language task parsing and scheduling','Designed responsive UI with drag-and-drop functionality'], impact: 'Reduced task planning time by 60% for beta users' },
+    { id: uid(), title: 'E-Commerce Platform', technologies: ['React', 'Node.js', 'MongoDB', 'Stripe'], bullets: ['Built a full-stack e-commerce platform with user auth, product catalog, and payment processing', 'Implemented real-time inventory tracking using WebSockets', 'Achieved 95+ Lighthouse performance score with lazy loading and code splitting'], impact: 'Served 5,000+ users with 99.9% uptime' },
+    { id: uid(), title: 'AI-Powered Task Manager', technologies: ['Python', 'FastAPI', 'GPT-4', 'React'], bullets: ['Developed an intelligent task management app with AI-powered priority suggestions', 'Integrated OpenAI API for natural language task parsing and scheduling', 'Designed responsive UI with drag-and-drop functionality'], impact: 'Reduced task planning time by 60% for beta users' },
   ];
   state.education = [
     { id: uid(), degree: 'B.S. Computer Science', college: 'University of California, Berkeley', year: '2023', cgpa: '3.8 / 4.0', coursework: ['Data Structures', 'Algorithms', 'Machine Learning', 'Database Systems'] }
@@ -825,7 +909,7 @@ function loadSampleData() {
   ];
   state.softSkills = ['Leadership', 'Communication', 'Problem-Solving', 'Teamwork', 'Adaptability', 'Time Management'];
   // Fill fields
-  ['fullName','location','phone','email','linkedin','github','objective'].forEach(f => {
+  ['fullName', 'location', 'phone', 'email', 'linkedin', 'github', 'objective'].forEach(f => {
     const el = document.getElementById(f);
     if (el) el.value = state[f];
   });
@@ -839,5 +923,5 @@ function loadSampleData() {
 // ====== UTILITIES ======
 function escHtml(str) {
   if (!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
