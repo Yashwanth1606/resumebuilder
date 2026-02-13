@@ -681,7 +681,7 @@ function updatePreview() {
   // Soft Skills
   if (s.softSkills.length) {
     html += `<div class="section-heading">Soft Skills</div>`;
-    html += `<div class="soft-skills-list">${s.softSkills.map(sk => `<span class="soft-skill-tag">${escHtml(sk)}</span>`).join('')}</div>`;
+    html += `<div class="soft-skills-list" style="display:block">${s.softSkills.map(escHtml).join(', ')}</div>`;
   }
   preview.innerHTML = html;
 }
