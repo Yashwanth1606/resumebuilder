@@ -24,6 +24,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
   <script src="https://unpkg.com/html-docx-js/dist/html-docx.js" defer></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 </head>
 
 <body>
@@ -258,6 +260,10 @@
         </button>
       </div>
       <div class="action-bar" style="padding-top:0">
+        <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importDocInput').click()"><i
+            class="fa-solid fa-file-import"></i> Import Resume</button>
+        <input type="file" id="importDocInput" accept=".pdf,.docx,.doc" style="display:none"
+          onchange="importResume(event)">
         <button class="btn btn-secondary btn-sm" onclick="exportJSON()"><i class="fa-solid fa-download"></i> Export
           JSON</button>
         <button class="btn btn-secondary btn-sm" onclick="document.getElementById('importInput').click()"><i
@@ -306,6 +312,7 @@
   </div>
 
   <script src="app.js?v=2"></script>
+  <script src="app_import.js"></script>
 </body>
 
 </html>
